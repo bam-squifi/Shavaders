@@ -12,8 +12,10 @@ Bullet :: struct {
 }
 
 
-createBullet::proc() -> ^Bullet {
+createBullet::proc(player: ^entities.Player) -> ^Bullet {
 	bullet := new(Bullet)
+	bullet.x = player.position.x + player.size.x /2
+	bullet.y = player.position.y - player.size.y / 2
 	return bullet
 }
 
@@ -51,13 +53,13 @@ main :: proc() {
 		if IsKeyPressed(.SPACE) {
 			if !isShot {
 				isShot = true
-				currentBullet = createBullet()
-				currentBullet.x = player.position.x + player.size.x /2
-				currentBullet.y = player.position.y - player.size.y / 2
+				currentBullet = createBullet(player)
 				DrawRectangle(currentBullet.x, currentBullet.y, 5, 10, GREEN)
-				fmt.printf("Shooting Bullet %d", currentBullet.y)
 			}
 		}
+		
+		// TODO: get the shots into an array and fire a few more bullets
+		// 		 could also do with some time difference or something similar
 
 		if isShot && currentBullet != nil {
 			currentBullet.y -= 10
