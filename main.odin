@@ -43,7 +43,7 @@ main :: proc() {
 
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
-		if IsKeyDown(.LEFT) || IsKeyPressed(.A) {
+		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
 			player.position.x -= player.speed
 		} 
 		if IsKeyDown(.RIGHT) || IsKeyDown(.D) {
