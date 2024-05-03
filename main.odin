@@ -39,13 +39,23 @@ main :: proc() {
 		BeginDrawing()
 		ClearBackground(WHITE)
 
+		screenWidth: i32 = GetScreenWidth()
+
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
 		if IsKeyDown(.LEFT) || IsKeyPressed(.A) {
 			player.position.x -= player.speed
 		} 
-		if IsKeyDown(.RIGHT) {
+		if IsKeyDown(.RIGHT) || IsKeyDown(.D) {
 			player.position.x += player.speed
+		}
+
+		if player.position.x < player.size.x {
+			player.position.x = player.size.x
+		}
+
+		if player.position.x >= screenWidth - player.size.x * 2 {
+			player.position.x = screenWidth - player.size.x * 2
 		}
 
 		EndDrawing()
