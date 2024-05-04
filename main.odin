@@ -30,11 +30,13 @@ main :: proc() {
 
 	isShot: bool = false
 
+
 	DisableCursor()
 	
 	SetTargetFPS(60)
 
 	currentBullet: ^Bullet = nil
+	bullets: [dynamic]^Bullet
 	
 	for !WindowShouldClose() {
 		BeginDrawing()
@@ -54,6 +56,8 @@ main :: proc() {
 			if !isShot {
 				isShot = true
 				currentBullet = createBullet(player)
+				append(&bullets, currentBullet)
+				fmt.printf("Bullet size: %d", len(&bullets))
 				DrawRectangle(currentBullet.x, currentBullet.y, 5, 10, GREEN)
 			}
 		}
@@ -64,7 +68,9 @@ main :: proc() {
 		if isShot && currentBullet != nil {
 			currentBullet.y -= 10
 			if currentBullet.y <= 0 {
+				ordered_remove(&bullets, 0)
 				free(currentBullet)
+				fmt.printf("Bullet size: %d", len(&bullets))
 				isShot = false
 			} else {
 				DrawRectangle(currentBullet.x, currentBullet.y, 5, 10, GREEN)
