@@ -19,6 +19,7 @@ createBullet::proc(player: ^entities.Player) -> ^Bullet {
 	return bullet
 }
 
+
 main :: proc() {
 	using raylib
 
@@ -28,20 +29,27 @@ main :: proc() {
 	screenHeight: i32 = GetScreenHeight()
 	player: ^entities.Player =  entities.InitPlayer(screenWidth, screenHeight)
 
-	isShot: bool = false
-
-
 	DisableCursor()
-	
 	SetTargetFPS(60)
 
+	isShot: bool = false
 	currentBullet: ^Bullet = nil
 	bullets: [dynamic]^Bullet
+	
+	oldTime:= GetTime()
+	newTime: f64
 	
 	for !WindowShouldClose() {
 		BeginDrawing()
 		ClearBackground(WHITE)
-		
+
+
+		// We have our time function working nicely
+		if newTime - oldTime >= 0.5 {
+			fmt.printf("Tick 2.0 Seconds")
+			oldTime = GetTime()
+		}
+				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 		
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
@@ -84,6 +92,8 @@ main :: proc() {
 		if player.position.x >= screenWidth - player.size.x * 2 {
 			player.position.x = screenWidth - player.size.x * 2
 		}
+
+		newTime = GetTime()
 
 		EndDrawing()
 	}
