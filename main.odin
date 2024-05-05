@@ -20,7 +20,7 @@ createBullet::proc(player: ^entities.Player) -> ^Bullet {
 }
 
 drawBullet::proc(bullet_ptr: ^Bullet) {
-
+	raylib.DrawRectangle(bullet_ptr.x, bullet_ptr.y, 5, 10, raylib.GREEN)
 }
 
 
@@ -62,8 +62,7 @@ main :: proc() {
 		if IsKeyPressed(.SPACE) {
 			currentBullet_ptr := createBullet(player)
 			append(&bullets, currentBullet_ptr)
-			fmt.printf("Bullet size: %d", len(&bullets))
-			DrawRectangle(currentBullet_ptr.x, currentBullet_ptr.y, 5, 10, GREEN)
+			drawBullet(currentBullet_ptr)
 		}		
 
 		if len(bullets) > 0 {
@@ -73,7 +72,7 @@ main :: proc() {
 					ordered_remove(&bullets, 0)
 					defer free(bullet_ptr)
 				} else {
-					DrawRectangle(bullet_ptr.x, bullet_ptr.y, 5, 10, GREEN)
+					drawBullet(bullet_ptr)
 				}
 			}
 		}
