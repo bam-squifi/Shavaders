@@ -45,7 +45,11 @@ main :: proc() {
 		ClearBackground(WHITE)
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
+
+		enemy:= entities.InitEnemy(screenWidth, screenHeight, (screenWidth / 2) - 50, (screenHeight / 9))
 		
+		DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
 			player.position.x -= player.speed
 			} 
