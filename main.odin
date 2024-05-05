@@ -19,6 +19,7 @@ createBullet::proc(player: ^entities.Player) -> ^Bullet {
 
 drawBullet::proc(bullet_ptr: ^Bullet) {
 	raylib.DrawRectangle(bullet_ptr.x, bullet_ptr.y, 5, 10, raylib.GREEN)
+	bullet_ptr.isVisible = true
 }
 
 main :: proc() {
@@ -49,15 +50,7 @@ main :: proc() {
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 		
-		if enemy.isActive {
-			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
-			enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
-			if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
-			   enemy.x - enemy.width <= screenWidth / 9 {
-				enemy.y += enemy.height / 2
-				enemy.direction = !enemy.direction
-			}
-		}
+		
 
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
 			player.position.x -= player.speed
@@ -75,7 +68,7 @@ main :: proc() {
 		if len(bullets) > 0 {
 			for bullet_ptr in bullets {
 				bullet_ptr.y -= 10
-				if bullet_ptr.y <= 0 {
+				if bullet_ptr.y <= 0 || !bullet_ptr.isVisible {
 					ordered_remove(&bullets, 0)
 					defer free(bullet_ptr)
 				} else {
@@ -86,10 +79,22 @@ main :: proc() {
 						   bullet_ptr.y + 10 >= enemy.y && bullet_ptr.y <= enemy.y + enemy.height
 						{
 							enemy.isActive = false
-							ordered_remove(&bullets, 0)
-							defer free(bullet_ptr)
 						}
 					}
+				}
+			}
+		}
+
+		if enemy.isActive {
+			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+			
+			// handles direction change
+			{
+				enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
+				if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
+				enemy.x - enemy.width <= screenWidth / 9 {
+					enemy.y += enemy.height / 2
+					enemy.direction = !enemy.direction
 				}
 			}
 		}
