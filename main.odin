@@ -48,10 +48,15 @@ main :: proc() {
 		ClearBackground(WHITE)
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
-
 		
 		if enemy.isActive {
 			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+			enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
+			if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
+			   enemy.x - enemy.width <= screenWidth / 9 {
+				enemy.y += enemy.height / 2
+				enemy.direction = !enemy.direction
+			}
 		}
 
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
@@ -89,8 +94,7 @@ main :: proc() {
 			}
 		}
 
-		// We have our time function working nicely, just have to limit the shots to the time and not the isShot
-		// Have fun tomorrow with this :D
+		// Timing function if we need it?
 		if newTime - oldTime >= 0.5 {
 			oldTime = GetTime()
 		}
