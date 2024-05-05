@@ -55,20 +55,17 @@ main :: proc() {
 		
 		
 		if IsKeyPressed(.SPACE) {
-			if !isShot {
-				isShot = true
-				currentBullet_ptr := createBullet(player)
-				append(&bullets, currentBullet_ptr)
-				fmt.printf("Bullet size: %d", len(&bullets))
-				DrawRectangle(currentBullet_ptr.x, currentBullet_ptr.y, 5, 10, GREEN)
-			}
+			currentBullet_ptr := createBullet(player)
+			append(&bullets, currentBullet_ptr)
+			fmt.printf("Bullet size: %d", len(&bullets))
+			DrawRectangle(currentBullet_ptr.x, currentBullet_ptr.y, 5, 10, GREEN)
 		}
 		
 		// TODO: get the shots into an array and fire a few more bullets
 		// 		 could also do with some time difference or something similar
 		
 
-		if isShot && len(bullets) > 0 {
+		if len(bullets) > 0 {
 			for bullet_ptr in bullets {
 				bullet_ptr.y -= 10
 				if bullet_ptr.y <= 0 {
