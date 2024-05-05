@@ -74,14 +74,17 @@ main :: proc() {
 					ordered_remove(&bullets, 0)
 					defer free(bullet_ptr)
 				} else {
-					{//checkCollsion
+					drawBullet(bullet_ptr)
+					if enemy.isActive
+					{
 						if bullet_ptr.x + 5 >= enemy.x && bullet_ptr.x <= enemy.x + enemy.width && 
 						   bullet_ptr.y + 10 >= enemy.y && bullet_ptr.y <= enemy.y + enemy.height
 						{
 							enemy.isActive = false
+							ordered_remove(&bullets, 0)
+							defer free(bullet_ptr)
 						}
 					}
-					drawBullet(bullet_ptr)
 				}
 			}
 		}

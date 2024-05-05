@@ -5,11 +5,11 @@ Enemy::struct {
     y: i32,
     width: i32,
     height: i32,
-    speed: int,
+    speed: f64,
     isActive: bool,
 }
 
-InitEnemy::proc(screenWidth, screenHeight: i32, x, y: i32, width:= i32(50), height:=i32(50), speed:=25) -> ^Enemy {
+InitEnemy::proc(screenWidth, screenHeight: i32, x, y: i32, width:= i32(50), height:=i32(50), speed:=0.25) -> ^Enemy {
     enemy:= new(Enemy)
     enemy.x = x
     enemy.y = y
