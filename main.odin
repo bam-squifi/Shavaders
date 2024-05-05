@@ -4,13 +4,11 @@ import "core:fmt"
 import "vendor:raylib"
 import "entities"
 
-
 Bullet :: struct {
 	x: i32,
 	y: i32,
 	isVisible: bool,
 }
-
 
 createBullet::proc(player: ^entities.Player) -> ^Bullet {
 	bullet := new(Bullet)
@@ -22,7 +20,6 @@ createBullet::proc(player: ^entities.Player) -> ^Bullet {
 drawBullet::proc(bullet_ptr: ^Bullet) {
 	raylib.DrawRectangle(bullet_ptr.x, bullet_ptr.y, 5, 10, raylib.GREEN)
 }
-
 
 main :: proc() {
 	using raylib
@@ -46,24 +43,21 @@ main :: proc() {
 	for !WindowShouldClose() {
 		BeginDrawing()
 		ClearBackground(WHITE)
-
-
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 		
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
 			player.position.x -= player.speed
 			} 
-			if IsKeyDown(.RIGHT) || IsKeyDown(.D) {
-				player.position.x += player.speed
-			}
-		
+		if IsKeyDown(.RIGHT) || IsKeyDown(.D) {
+			player.position.x += player.speed
+		}
 		
 		if IsKeyPressed(.SPACE) {
 			currentBullet_ptr := createBullet(player)
 			append(&bullets, currentBullet_ptr)
 			drawBullet(currentBullet_ptr)
-		}		
+		}
 
 		if len(bullets) > 0 {
 			for bullet_ptr in bullets {
