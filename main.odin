@@ -19,6 +19,10 @@ createBullet::proc(player: ^entities.Player) -> ^Bullet {
 	return bullet
 }
 
+drawBullet::proc(bullet_ptr: ^Bullet) {
+
+}
+
 
 main :: proc() {
 	using raylib
@@ -28,10 +32,11 @@ main :: proc() {
 	screenWidth: i32 = GetScreenWidth()
 	screenHeight: i32 = GetScreenHeight()
 	player: ^entities.Player =  entities.InitPlayer(screenWidth, screenHeight)
+	defer free(player)
 
 	DisableCursor()
 	SetTargetFPS(60)
-	
+
 	bullets: [dynamic]^Bullet
 	
 	oldTime:= GetTime()
@@ -58,11 +63,7 @@ main :: proc() {
 			append(&bullets, currentBullet_ptr)
 			fmt.printf("Bullet size: %d", len(&bullets))
 			DrawRectangle(currentBullet_ptr.x, currentBullet_ptr.y, 5, 10, GREEN)
-		}
-		
-		// TODO: get the shots into an array and fire a few more bullets
-		// 		 could also do with some time difference or something similar
-		
+		}		
 
 		if len(bullets) > 0 {
 			for bullet_ptr in bullets {
