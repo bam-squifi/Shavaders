@@ -33,7 +33,6 @@ main :: proc() {
 	SetTargetFPS(60)
 
 	isShot: bool = false
-	currentBullet: ^Bullet = nil
 	bullets: [dynamic]^Bullet
 	
 	oldTime:= GetTime()
@@ -44,11 +43,6 @@ main :: proc() {
 		ClearBackground(WHITE)
 
 
-		// We have our time function working nicely
-		if newTime - oldTime >= 0.5 {
-			fmt.printf("Tick 2.0 Seconds")
-			oldTime = GetTime()
-		}
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 		
@@ -63,26 +57,35 @@ main :: proc() {
 		if IsKeyPressed(.SPACE) {
 			if !isShot {
 				isShot = true
-				currentBullet = createBullet(player)
-				append(&bullets, currentBullet)
+				currentBullet_ptr := createBullet(player)
+				append(&bullets, currentBullet_ptr)
 				fmt.printf("Bullet size: %d", len(&bullets))
-				DrawRectangle(currentBullet.x, currentBullet.y, 5, 10, GREEN)
+				DrawRectangle(currentBullet_ptr.x, currentBullet_ptr.y, 5, 10, GREEN)
 			}
 		}
 		
 		// TODO: get the shots into an array and fire a few more bullets
 		// 		 could also do with some time difference or something similar
+		
 
-		if isShot && currentBullet != nil {
-			currentBullet.y -= 10
-			if currentBullet.y <= 0 {
-				ordered_remove(&bullets, 0)
-				free(currentBullet)
-				fmt.printf("Bullet size: %d", len(&bullets))
-				isShot = false
-			} else {
-				DrawRectangle(currentBullet.x, currentBullet.y, 5, 10, GREEN)
+		if isShot && len(bullets) > 0 {
+			for bullet_ptr in bullets {
+				bullet_ptr.y -= 10
+				if bullet_ptr.y <= 0 {
+					ordered_remove(&bullets, 0)
+					defer free(bullet_ptr)
+					fmt.printf("Bullet size: %d", len(&bullets))
+					isShot = false
+				} else {
+					DrawRectangle(bullet_ptr.x, bullet_ptr.y, 5, 10, GREEN)
+				}
 			}
+		}
+
+		// We have our time function working nicely, just have to limit the shots to the time and not the isShot
+		// Have fun tomorrow with this :D
+		if newTime - oldTime >= 0.5 {
+			oldTime = GetTime()
 		}
 
 		if player.position.x < player.size.x {
