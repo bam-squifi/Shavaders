@@ -38,6 +38,7 @@ main :: proc() {
 	SetTargetFPS(60)
 
 	bullets: [dynamic]^Bullet
+	defer delete(bullets)
 	
 	oldTime:= GetTime()
 	newTime: f64
