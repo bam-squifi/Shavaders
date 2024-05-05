@@ -31,6 +31,9 @@ main :: proc() {
 	player: ^entities.Player =  entities.InitPlayer(screenWidth, screenHeight)
 	defer free(player)
 
+	enemy:= entities.InitEnemy(screenWidth, screenHeight, (screenWidth / 2) - 50, (screenHeight / 9))
+	defer free(enemy)
+
 	DisableCursor()
 	SetTargetFPS(60)
 
@@ -46,9 +49,10 @@ main :: proc() {
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
-		enemy:= entities.InitEnemy(screenWidth, screenHeight, (screenWidth / 2) - 50, (screenHeight / 9))
 		
-		DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+		if enemy.isActive {
+			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+		}
 
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
 			player.position.x -= player.speed
@@ -70,6 +74,11 @@ main :: proc() {
 					ordered_remove(&bullets, 0)
 					defer free(bullet_ptr)
 				} else {
+					{//checkCollsion
+						if bullet_ptr.x + 5 >= enemy.x && bullet_ptr.x <= enemy.x + enemy.width {
+							enemy.isActive = false
+						}
+					}
 					drawBullet(bullet_ptr)
 				}
 			}
