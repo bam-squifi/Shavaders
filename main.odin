@@ -31,8 +31,7 @@ main :: proc() {
 
 	DisableCursor()
 	SetTargetFPS(60)
-
-	isShot: bool = false
+	
 	bullets: [dynamic]^Bullet
 	
 	oldTime:= GetTime()
@@ -71,8 +70,6 @@ main :: proc() {
 				if bullet_ptr.y <= 0 {
 					ordered_remove(&bullets, 0)
 					defer free(bullet_ptr)
-					fmt.printf("Bullet size: %d", len(&bullets))
-					isShot = false
 				} else {
 					DrawRectangle(bullet_ptr.x, bullet_ptr.y, 5, 10, GREEN)
 				}
