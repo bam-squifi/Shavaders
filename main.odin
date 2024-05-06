@@ -8,12 +8,14 @@ Bullet :: struct {
 	x: i32,
 	y: i32,
 	isVisible: bool,
+	speed: i32
 }
 
 createBullet::proc(player: ^entities.Player) -> ^Bullet {
 	bullet := new(Bullet)
 	bullet.x = player.position.x + player.size.x /2
 	bullet.y = player.position.y - player.size.y / 2
+	bullet.speed = 5
 	return bullet
 }
 
@@ -106,7 +108,7 @@ main :: proc() {
 		if len(bullets) > 0 {
 			for bullet_ptr, index in bullets {
 				
-				bullet_ptr.y -= 10
+				bullet_ptr.y -= bullet_ptr.speed
 
 				// remove bullets if off screen
 				if bullet_ptr.y <= 0 || !bullet_ptr.isVisible {

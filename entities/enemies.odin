@@ -10,7 +10,7 @@ Enemy::struct {
     direction: bool
 }
 
-InitEnemy::proc(screenWidth, screenHeight: i32, x, y: i32, width:= i32(50), height:=i32(50), speed:=i32(5)) -> ^Enemy {
+InitEnemy::proc(screenWidth, screenHeight: i32, x, y: i32, width:= i32(50), height:=i32(50), speed:=i32(4)) -> ^Enemy {
     enemy:= new(Enemy)
     enemy.x = x
     enemy.y = y
