@@ -37,11 +37,22 @@ main :: proc() {
 	enemy:= entities.InitEnemy(screenWidth, screenHeight, (screenWidth / 2) - 50, (screenHeight / 9))
 	defer free(enemy)
 
+
 	DisableCursor()
 	SetTargetFPS(60)
 
 	bullets: [dynamic]^Bullet
 	defer delete(bullets)
+
+	enemies: [dynamic]^entities.Enemy
+	defer delete(enemies)
+
+	enemyWidth : i32 = 75
+
+	for i in 3..=7 {
+		enemy:= entities.InitEnemy(screenWidth, screenHeight, enemyWidth * i32(i), (screenHeight / 9))
+		append(&enemies, enemy)
+	}
 	
 	oldTime:= GetTime()
 	newTime: f64
@@ -51,7 +62,22 @@ main :: proc() {
 		ClearBackground(WHITE)
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
-		
+
+		for enemy in enemies {
+			if enemy.isActive {
+			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+			
+			// handles direction change
+			{
+				enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
+				if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
+				enemy.x - enemy.width <= screenWidth / 9 {
+					enemy.y += enemy.height * 2
+					enemy.direction = !enemy.direction
+				}
+			}
+		}
+		}
 		
 
 		if IsKeyDown(.LEFT) || IsKeyDown(.A) {
@@ -69,8 +95,9 @@ main :: proc() {
 
 		if len(bullets) > 0 {
 			for bullet_ptr, index in bullets {
+				
 				bullet_ptr.y -= 10
-				if bullet_ptr.y <= 0 || !bullet_ptr.isVisible {
+				if bullet_ptr.y <= 0 {
 					unordered_remove(&bullets, index)
 					defer free(bullet_ptr)
 				} else {
@@ -83,24 +110,17 @@ main :: proc() {
 							bullet_ptr.isVisible = false
 						}
 					}
-					if bullet_ptr.isVisible { drawBullet(bullet_ptr) }
+					if bullet_ptr.isVisible { 
+						drawBullet(bullet_ptr) 
+					} else { 
+						unordered_remove(&bullets, index)
+						defer free(bullet_ptr)
+					} 
 				}
 			}
 		}
 
-		if enemy.isActive {
-			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
-			
-			// handles direction change
-			{
-				enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
-				if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
-				enemy.x - enemy.width <= screenWidth / 9 {
-					enemy.y += enemy.height / 2
-					enemy.direction = !enemy.direction
-				}
-			}
-		}
+		
 
 		// Timing function if we need it?
 		if newTime - oldTime >= 0.5 {
@@ -119,5 +139,4 @@ main :: proc() {
 
 		EndDrawing()
 	}
-
 }
