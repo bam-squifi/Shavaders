@@ -63,6 +63,7 @@ main :: proc() {
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
+		// handle enemy creation and removal
 		for enemy, index in enemies {
 			if enemy.isActive {
 				DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
@@ -79,6 +80,7 @@ main :: proc() {
 			} else {
 				unordered_remove(&enemies, index)
 				defer free(enemy)
+				// fmt.printf("Removing Enemy at index %d", index)
 			}
 		}
 		
@@ -100,10 +102,14 @@ main :: proc() {
 			for bullet_ptr, index in bullets {
 				
 				bullet_ptr.y -= 10
-				if bullet_ptr.y <= 0 {
+
+				// remove bullets if off screen
+				if bullet_ptr.y <= 0 || !bullet_ptr.isVisible {
 					unordered_remove(&bullets, index)
 					defer free(bullet_ptr)
+					// fmt.printf("Removing bullet at index %d", index)
 				} else {
+					// check collision of bullet and enemy
 					for enemy, index in enemies {
 						if enemy.isActive
 						{
@@ -116,12 +122,8 @@ main :: proc() {
 						}
 					}
 
-
 					if bullet_ptr.isVisible { 
 						drawBullet(bullet_ptr) 
-					} else { 
-						unordered_remove(&bullets, index)
-						defer free(bullet_ptr)
 					} 
 				}
 			}
