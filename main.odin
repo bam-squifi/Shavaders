@@ -26,6 +26,7 @@ main :: proc() {
 	using raylib
 
 	InitWindow(1280, 960, "Shavaders v.0.01dev")
+	defer CloseWindow()
 
 	screenWidth: i32 = GetScreenWidth()
 	screenHeight: i32 = GetScreenHeight()
@@ -116,6 +117,5 @@ main :: proc() {
 
 		EndDrawing()
 	}
-	defer free(player)
-	defer CloseWindow()
+
 }
