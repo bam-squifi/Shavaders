@@ -63,20 +63,23 @@ main :: proc() {
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
-		for enemy in enemies {
+		for enemy, index in enemies {
 			if enemy.isActive {
-			DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
-			
-			// handles direction change
-			{
-				enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
-				if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
-				enemy.x - enemy.width <= screenWidth / 9 {
-					enemy.y += enemy.height * 2
-					enemy.direction = !enemy.direction
+				DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+				
+				// handles direction change
+				{
+					enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
+					if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
+					enemy.x - enemy.width <= screenWidth / 9 {
+						enemy.y += enemy.height * 2
+						enemy.direction = !enemy.direction
+					}
 				}
+			} else {
+				unordered_remove(&enemies, index)
+				defer free(enemy)
 			}
-		}
 		}
 		
 
@@ -101,15 +104,19 @@ main :: proc() {
 					unordered_remove(&bullets, index)
 					defer free(bullet_ptr)
 				} else {
-					if enemy.isActive
-					{
-						if bullet_ptr.x + 5 >= enemy.x && bullet_ptr.x <= enemy.x + enemy.width && 
-						   bullet_ptr.y + 10 >= enemy.y && bullet_ptr.y <= enemy.y + enemy.height
+					for enemy, index in enemies {
+						if enemy.isActive
 						{
-							enemy.isActive = false
-							bullet_ptr.isVisible = false
+							if bullet_ptr.x + 5 >= enemy.x && bullet_ptr.x <= enemy.x + enemy.width && 
+							bullet_ptr.y + 10 >= enemy.y && bullet_ptr.y <= enemy.y + enemy.height
+							{
+								enemy.isActive = false
+								bullet_ptr.isVisible = false
+							}
 						}
 					}
+
+
 					if bullet_ptr.isVisible { 
 						drawBullet(bullet_ptr) 
 					} else { 
