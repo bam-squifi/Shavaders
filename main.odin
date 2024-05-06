@@ -37,7 +37,6 @@ main :: proc() {
 	enemy:= entities.InitEnemy(screenWidth, screenHeight, (screenWidth / 2) - 50, (screenHeight / 9))
 	defer free(enemy)
 
-
 	DisableCursor()
 	SetTargetFPS(60)
 
@@ -49,8 +48,14 @@ main :: proc() {
 
 	enemyWidth : i32 = 75
 
+	// weird range but need that to keep distance from left hand side of screen
 	for i in 3..=7 {
 		enemy:= entities.InitEnemy(screenWidth, screenHeight, enemyWidth * i32(i), (screenHeight / 9))
+		append(&enemies, enemy)
+	}
+
+	for i in 3..=7 {
+		enemy:= entities.InitEnemy(screenWidth, screenHeight, enemyWidth * i32(i), (screenHeight / 5))
 		append(&enemies, enemy)
 	}
 	
@@ -73,7 +78,7 @@ main :: proc() {
 					enemy.x += enemy.direction ? enemy.speed : enemy.speed * -1
 					if enemy.x + enemy.width >= screenWidth * 8 / 9 ||
 					enemy.x - enemy.width <= screenWidth / 9 {
-						enemy.y += enemy.height * 2
+						enemy.y += enemy.height * 3
 						enemy.direction = !enemy.direction
 					}
 				}
