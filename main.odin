@@ -30,6 +30,7 @@ main :: proc() {
 
 	screenWidth: i32 = GetScreenWidth()
 	screenHeight: i32 = GetScreenHeight()
+	
 	player: ^entities.Player =  entities.InitPlayer(screenWidth, screenHeight)
 	defer free(player)
 
@@ -67,21 +68,22 @@ main :: proc() {
 		}
 
 		if len(bullets) > 0 {
-			for bullet_ptr in bullets {
+			for bullet_ptr, index in bullets {
 				bullet_ptr.y -= 10
 				if bullet_ptr.y <= 0 || !bullet_ptr.isVisible {
-					ordered_remove(&bullets, 0)
+					unordered_remove(&bullets, index)
 					defer free(bullet_ptr)
 				} else {
-					drawBullet(bullet_ptr)
 					if enemy.isActive
 					{
 						if bullet_ptr.x + 5 >= enemy.x && bullet_ptr.x <= enemy.x + enemy.width && 
 						   bullet_ptr.y + 10 >= enemy.y && bullet_ptr.y <= enemy.y + enemy.height
 						{
 							enemy.isActive = false
+							bullet_ptr.isVisible = false
 						}
 					}
+					if bullet_ptr.isVisible { drawBullet(bullet_ptr) }
 				}
 			}
 		}
