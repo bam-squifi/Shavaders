@@ -1,6 +1,6 @@
 #version 330 core
 out vec4 FragColor;
-in vec2 fragCoord;
+in vec2 fragTexCoord;
 
 uniform float u_time; // Passed from your game to animate the shader
 uniform vec2 u_resolution; // Screen resolution
