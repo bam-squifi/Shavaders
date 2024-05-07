@@ -73,7 +73,7 @@ main :: proc() {
 		// ClearBackground(WHITE)
 
 		uniformLocTime := GetShaderLocation(shader, "u_time")
-		uniformLocResolution := GetShaderLocation(shader, "resolution")
+		uniformLocResolution := GetShaderLocation(shader, "u_resolution")
 		
 		// shader cannot handle double precision floats
 		timeValue: f32 = f32(GetTime())
