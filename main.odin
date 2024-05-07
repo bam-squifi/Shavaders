@@ -53,12 +53,9 @@ main :: proc() {
 	// weird range but need that to keep distance from left hand side of screen
 	for i in 3..=7 {
 		enemy:= entities.InitEnemy(screenWidth, screenHeight, enemyWidth * i32(i), (screenHeight / 9))
+		enemy2:= entities.InitEnemy(screenWidth, screenHeight, enemyWidth * i32(i), (screenHeight / 5))
 		append(&enemies, enemy)
-	}
-
-	for i in 3..=7 {
-		enemy:= entities.InitEnemy(screenWidth, screenHeight, enemyWidth * i32(i), (screenHeight / 5))
-		append(&enemies, enemy)
+		append(&enemies, enemy2)
 	}
 	
 	oldTime:= GetTime()
