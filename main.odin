@@ -65,7 +65,7 @@ main :: proc() {
 	newTime: f64
 
 	
-	shader:= LoadShader("milky_way.vs","milky_way.fs")
+	shader:= LoadShader("resources/shaders/base.vs","resources/shaders/milky_way.fs")
 	defer UnloadShader(shader)
 	
 	for !WindowShouldClose() {
