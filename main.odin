@@ -63,10 +63,29 @@ main :: proc() {
 	
 	oldTime:= GetTime()
 	newTime: f64
+
+	
+	shader:= LoadShader("milky_way.vs","milky_way.fs")
+	defer UnloadShader(shader)
 	
 	for !WindowShouldClose() {
 		BeginDrawing()
-		ClearBackground(WHITE)
+		// ClearBackground(WHITE)
+
+		uniformLocTime := GetShaderLocation(shader, "u_time")
+		uniformLocResolution := GetShaderLocation(shader, "resolution")
+		
+		// shader cannot handle double precision floats
+		timeValue: f32 = f32(GetTime())
+		
+		resolution: Vector2 = {f32(GetScreenWidth()), f32(GetScreenHeight())}
+
+		SetShaderValue(shader, uniformLocTime, &timeValue, .FLOAT)
+		SetShaderValue(shader, uniformLocResolution, &resolution, .VEC2)
+
+		BeginShaderMode(shader)
+			DrawRectangle(0,0,GetScreenWidth(), GetScreenHeight(), WHITE)
+		EndShaderMode()
 				
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
@@ -113,7 +132,7 @@ main :: proc() {
 				// remove bullets if off screen
 				if bullet_ptr.y <= 0 || !bullet_ptr.isVisible {
 					unordered_remove(&bullets, index)
-					defer free(bullet_ptr)
+					free(bullet_ptr)
 					// fmt.printf("Removing bullet at index %d", index)
 				} else {
 					// check collision of bullet and enemy
@@ -153,6 +172,8 @@ main :: proc() {
 
 		newTime = GetTime()
 
+		
+		
 		EndDrawing()
 	}
 }
