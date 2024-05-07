@@ -15,17 +15,16 @@ vec3 blendOverlay(vec3 base, vec3 blend) {
     return mix(1.0 - 2.0 * (1.0 - base) * (1.0 - blend), 2.0 * base * blend, step(base, vec3(0.5)));
 }
 
+vec3 colourA = vec3(0.149, 0.141, 0.131);
+vec3 colourB = vec3(0.021, 0.033, 0.024);
+
 // Main function to draw Milky Way
 void main()
 {
     vec2 uv = gl_FragCoord.xy / u_resolution.xy;
     
-    float y = sin(uv.x)
-
-    vec3 col = vec3(y);
-
-    col = abs(uv.y - uv.x)*col;
+    vec3 col = mix(colourA, colourB, abs(sin(u_time)));
 
     // Output the color
-    FragColor = vec4(vec3(y),1.0);
+    FragColor = vec4(col,1.0);
 }

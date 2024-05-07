@@ -89,7 +89,7 @@ main :: proc() {
 		// handle enemy creation and removal
 		for enemy, index in enemies {
 			if enemy.isActive {
-				DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, BLACK)
+				DrawRectangle(enemy.x, enemy.y, enemy.width, enemy.height, GREEN)
 				
 				// handles direction change
 				{
