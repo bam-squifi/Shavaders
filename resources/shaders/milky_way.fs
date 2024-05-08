@@ -21,16 +21,10 @@ vec3 colourB = vec3(0.021, 0.033, 0.024);
 // Main function to draw Milky Way
 void main()
 {
-    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-    vec2 p = uv;
-    vec3 col;
-    float length;
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy * .5;
 
-    for(int i=0;i<3;i++) {
-        p-=.5;
-        length = sqrt(p.x*p.x + p.y * p.y);
-        col[i]=smoothstep(0.2, 0.4, abs(sin(p.x/length + u_time)));
-    }
+    vec3 col = vec3(mod(abs(sin(u_time + uv.y)) * 2.0, uv.x + .2), 0.0, 0.0);
+ 
     // Output the color
     FragColor = vec4(col,1.0);
 }
