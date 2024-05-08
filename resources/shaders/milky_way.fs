@@ -22,9 +22,15 @@ vec3 colourB = vec3(0.021, 0.033, 0.024);
 void main()
 {
     vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-    
-    vec3 col = mix(colourA, colourB, abs(sin(u_time)));
+    vec2 p = uv;
+    vec3 col;
+    float length;
 
+    for(int i=0;i<3;i++) {
+        p-=.5;
+        length = sqrt(p.x*p.x + p.y * p.y);
+        col[i]=smoothstep(0.2, 0.4, abs(sin(p.x/length + u_time)));
+    }
     // Output the color
     FragColor = vec4(col,1.0);
 }
