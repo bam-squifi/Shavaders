@@ -23,9 +23,9 @@ void main()
 {
     vec2 uv = gl_FragCoord.xy / u_resolution.xy;
     vec2 p = uv;
-    p-=.1;
+    p-=.5;
 
-    vec3 col = vec3(0.0, 0.0, clamp(p.y, 0.0, 0.5));
+    vec3 col = vec3(0.0, 0.0, mod(p.x, 2.0));
  
     // Output the color
     FragColor = vec4(col,1.0);
