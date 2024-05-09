@@ -146,6 +146,7 @@ main :: proc() {
 							{
 								enemy.isActive = false
 								bullet_ptr.isVisible = false
+								score += 10
 							}
 						}
 					}
