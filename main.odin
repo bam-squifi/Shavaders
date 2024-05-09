@@ -66,6 +66,8 @@ main :: proc() {
 	defer UnloadShader(shader)
 
 	score := 0
+
+	
 	
 	for !WindowShouldClose() {
 		BeginDrawing()

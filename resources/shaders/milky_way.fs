@@ -15,8 +15,8 @@ vec3 blendOverlay(vec3 base, vec3 blend) {
     return mix(1.0 - 2.0 * (1.0 - base) * (1.0 - blend), 2.0 * base * blend, step(base, vec3(0.5)));
 }
 
-vec3 colourA = vec3(0.149, 0.141, 0.131);
-vec3 colourB = vec3(0.021, 0.033, 0.024);
+vec3 colourA = vec3(0.649, 0.041, 0.823);
+vec3 colourB = vec3(0.921, 0.433, 0.324);
 
 // Main function to draw Milky Way
 void main()
@@ -25,7 +25,9 @@ void main()
     vec2 p = uv;
     p-=.5;
 
-    vec3 col = vec3(0.0, 0.0, mod(p.x, 2.0));
+    float pct = abs(sin(u_time));
+
+    vec3 col = mix(colourA, colourB, pct);
  
     // Output the color
     FragColor = vec4(col,1.0);
