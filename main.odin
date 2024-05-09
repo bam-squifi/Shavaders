@@ -67,7 +67,8 @@ main :: proc() {
 
 	score := 0
 
-	
+	isWon := false
+	isLost := false
 	
 	for !WindowShouldClose() {
 		BeginDrawing()
@@ -91,6 +92,11 @@ main :: proc() {
 				
 		DrawText(TextFormat("Score: %d", score), screenWidth / 8 * 7, screenHeight / 20, 20, WHITE)
 
+		if isWon {
+			DrawText("You did it!", screenWidth / 2 - 20, screenHeight / 2, 20, WHITE)
+		} else if isLost {
+			DrawText("You did not do it!", screenWidth / 2 - 20, screenHeight / 2, 20, WHITE)
+		} else {
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
 		// handle enemy creation and removal
@@ -112,6 +118,10 @@ main :: proc() {
 				defer free(enemy)
 				// fmt.printf("Removing Enemy at index %d", index)
 			}
+		}
+
+		if len(enemies) == 0 {
+			isWon = true
 		}
 		
 
@@ -177,7 +187,7 @@ main :: proc() {
 
 		newTime = GetTime()
 
-		
+		}		
 		
 		EndDrawing()
 	}
