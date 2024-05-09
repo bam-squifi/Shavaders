@@ -117,7 +117,7 @@ main :: proc() {
 
 				// handles losing condition
 				{
-					if enemy.y >= player.position.x {
+					if enemy.y >= player.position.y {
 						isLost = true
 					}
 				}
