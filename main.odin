@@ -64,10 +64,13 @@ main :: proc() {
 	
 	shader:= LoadShader("resources/shaders/base.vs","resources/shaders/milky_way.fs")
 	defer UnloadShader(shader)
+
+	score := 0
 	
 	for !WindowShouldClose() {
 		BeginDrawing()
 		// ClearBackground(WHITE)
+
 
 		uniformLocTime := GetShaderLocation(shader, "u_time")
 		uniformLocResolution := GetShaderLocation(shader, "u_resolution")
@@ -84,6 +87,8 @@ main :: proc() {
 			DrawRectangle(0,0,GetScreenWidth(), GetScreenHeight(), WHITE)
 		EndShaderMode()
 				
+		DrawText(TextFormat("Score: %d", score), screenWidth / 8 * 7, screenHeight / 20, 20, WHITE)
+
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
 		// handle enemy creation and removal
