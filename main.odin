@@ -97,6 +97,7 @@ main :: proc() {
 		} else if isLost {
 			DrawText("You did not do it!", screenWidth / 2 - 20, screenHeight / 2, 20, WHITE)
 		} else {
+
 		DrawRectangle(player.position.x, player.position.y, player.size.x, player.size.y, RED)
 
 		// handle enemy creation and removal
@@ -111,6 +112,13 @@ main :: proc() {
 					enemy.x - enemy.width <= screenWidth / 9 {
 						enemy.y += enemy.height * 3
 						enemy.direction = !enemy.direction
+					}
+				}
+
+				// handles losing condition
+				{
+					if enemy.y >= player.position.x {
+						isLost = true
 					}
 				}
 			} else {
